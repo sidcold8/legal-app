@@ -1,0 +1,138 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "com.btl.Main",
+            "projectName": "ll"
+        },
+        {
+            "type": "java",
+            "name": "AdvocateBiography",
+            "request": "launch",
+            "mainClass": "com.btl.View.AdvocateBiography",
+            "projectName": "ll"
+        },
+        {
+            "type": "java",
+            "name": "AdvocateGrid",
+            "request": "launch",
+            "mainClass": "com.btl.View.AdvocateGrid",
+            "projectName": "ll"
+        },
+        {
+            "type": "java",
+            "name": "GetStarted",
+            "request": "launch",
+            "mainClass": "com.btl.View.GetStarted",
+            "projectName": "ll"
+        },
+        {
+            "type": "java",
+            "name": "LD",
+            "request": "launch",
+            "mainClass": "com.btl.View.LD",
+            "projectName": "ll"
+        },
+        {
+            "type": "java",
+            "name": "aboutus",
+            "request": "launch",
+            "mainClass": "com.btl.View.aboutus",
+            "projectName": "ll"
+        },
+        {
+            "type": "java",
+            "name": "landingPage",
+            "request": "launch",
+            "mainClass": "com.btl.View.landingPage",
+            "projectName": "ll"
+        },
+        {
+            "type": "java",
+            "name": "lawyer1",
+            "request": "launch",
+            "mainClass": "com.btl.View.lawyer1",
+            "projectName": "ll"
+        },
+        {
+            "type": "java",
+            "name": "lawyer2",
+            "request": "launch",
+            "mainClass": "com.btl.View.lawyer2",
+            "projectName": "ll"
+        },
+        {
+            "type": "java",
+            "name": "lawyer3",
+            "request": "launch",
+            "mainClass": "com.btl.View.lawyer3",
+            "projectName": "ll"
+        },
+        {
+            "type": "java",
+            "name": "lawyer4",
+            "request": "launch",
+            "mainClass": "com.btl.View.lawyer4",
+            "projectName": "ll"
+        },
+        {
+            "type": "java",
+            "name": "lawyer5",
+            "request": "launch",
+            "mainClass": "com.btl.View.lawyer5",
+            "projectName": "ll"
+        },
+        {
+            "type": "java",
+            "name": "lawyer6",
+            "request": "launch",
+            "mainClass": "com.btl.View.lawyer6",
+            "projectName": "ll",
+            "vmArgs": "--module-path \"C:/javafx-sdk-21.0.7/lib\" --add-modules javafx.controls,javafx.fxml"
+        },
+        {
+            "type": "java",
+            "name": "lawyerClientSignup",
+            "request": "launch",
+            "mainClass": "com.btl.View.lawyerClientSignup",
+            "projectName": "ll",
+            "vmArgs": "--module-path \"C:/javafx-sdk-21.0.7/lib\" --add-modules javafx.controls,javafx.fxml"
+        },
+        {
+            "type": "java",
+            "name": "lawyerlandingpage",
+            "request": "launch",
+            "mainClass": "com.btl.View.lawyerlandingpage",
+            "projectName": "ll",
+            "vmArgs": "--module-path \"C:/javafx-sdk-21.0.7/lib\" --add-modules javafx.controls,javafx.fxml"
+        },
+        {
+            "type": "java",
+            "name": "loginPage",
+            "request": "launch",
+            "mainClass": "com.btl.View.loginPage",
+            "projectName": "ll",
+            "vmArgs": "--module-path \"C:/javafx-sdk-21.0.7/lib\" --add-modules javafx.controls,javafx.fxml"
+        },
+        {
+            "type": "java",
+            "name": "notificationPage",
+            "request": "launch",
+            "mainClass": "com.btl.View.notificationPage",
+            "projectName": "ll",
+            "vmArgs": "--module-path \"C:/javafx-sdk-21.0.7/lib\" --add-modules javafx.controls,javafx.fxml"
+        }
+    ]
+}

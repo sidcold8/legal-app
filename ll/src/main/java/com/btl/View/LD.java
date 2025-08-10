@@ -1,0 +1,551 @@
+package com.btl.View;
+
+//import com.google.firebase.messaging.AndroidConfig.Priority;
+
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.stage.Modality; // Import Modality for popup window
+import javafx.stage.Stage;
+import javafx.stage.FileChooser; // Import for FileChooser
+import javafx.scene.Node; // Import for javafx.scene.Node
+
+// Assuming these exist and are correctly compiled for navigation
+import com.btl.View.aboutus;
+import com.btl.View.landingPage; // Keep this import if landingPage is used elsewhere, or remove if not.
+import com.btl.View.notificationPage;
+import com.btl.View.lawyerlandingpage; // Import for lawyerlandingpage
+
+public class LD extends Application {
+    private Stage primaryStage;
+    private Text nameText, ratingText, expText, locText;
+    private TextArea bioTextArea;
+    private TextField phoneField, locationField, experienceField;
+    private ComboBox<String> specializationComboBox;
+    private ComboBox<String> courtComboBox;
+    private TextArea langTextArea, eduTextArea;
+
+    private Button editSaveButton;
+    private Button updateProfilePicButton;
+    private ImageView profileImageView;
+
+    private boolean isEditMode = false;
+
+    // Replaced local file path with a generic placeholder URL for portability
+    private static final String LAWYER_PROFILE_IMAGE_URL = "Assets/Images/male icon.png";
+
+    @Override
+    public void start(Stage primaryStage) {
+        System.out.println("LD start method called!");
+
+        this.primaryStage = primaryStage;
+        primaryStage.setTitle("Lawyer Profile - Bridge To Law");
+
+        // --- Top Navigation/Header Panel ---
+        HBox topPanel = new HBox(10); // Spacing between elements
+        topPanel.setAlignment(Pos.CENTER_LEFT);
+        topPanel.setPadding(new Insets(15, 30, 15, 30));
+        topPanel.setStyle("-fx-background-color: #001f4d;"); // Dark blue background
+
+        // Logo (Bridge To Law)
+        VBox logoBox = new VBox(-10); // Negative spacing for "Bridge To Law." stacked effect
+        Label bridgeLabel = new Label("Bridge");
+        bridgeLabel.setStyle("-fx-text-fill: white; -fx-font-size: 32px; -fx-font-weight: bold;");
+        Label toLawLabel = new Label("To Law.");
+        toLawLabel.setStyle("-fx-text-fill: white; -fx-font-size: 32px; -fx-font-weight: bold;");
+        logoBox.getChildren().addAll(bridgeLabel, toLawLabel);
+        logoBox.setAlignment(Pos.CENTER_LEFT);
+        HBox.setMargin(logoBox, new Insets(0, 60, 0, 0)); // Margin to the right of the logo
+
+        // Navigation Buttons Styling
+        String navButtonStyle = "-fx-background-color: transparent; " +
+                                "-fx-text-fill: white; " +
+                                "-fx-font-size: 14px; " +
+                                "-fx-font-weight: bold; " +
+                                "-fx-padding: 5px 10px;";
+        String navButtonHoverStyle = "-fx-background-color: rgba(255,255,255,0.2); " + // Light overlay on hover
+                                     "-fx-text-fill: white; " +
+                                     "-fx-font-size: 14px; " +
+                                     "-fx-font-weight: bold; " +
+                                     "-fx-padding: 5px 10px;";
+
+        Button homeButton = new Button("Home");
+        homeButton.setStyle(navButtonStyle);
+        homeButton.setOnMouseEntered(e -> homeButton.setStyle(navButtonHoverStyle));
+        homeButton.setOnMouseExited(e -> homeButton.setStyle(navButtonStyle));
+        // --- MODIFIED NAVIGATION ACTION FOR HOME BUTTON ---
+        homeButton.setOnAction(e -> {
+            System.out.println("Navigating to Home (lawyerlandingpage)...");
+            primaryStage.close(); // Close current stage
+            try {
+                new lawyerlandingpage().start(primaryStage); // Launch lawyerlandingpage
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                showCustomMessage("Navigation Error", "Could not load the Home page. Please ensure 'lawyerlandingpage.java' exists and is correctly compiled.", Color.RED);
+            }
+        });
+        // Make logo clickable for Home as well
+        logoBox.setOnMouseClicked(e -> {
+            System.out.println("Navigating to Home (lawyerlandingpage) via logo..."); // Updated message
+            primaryStage.close();
+            try {
+                new lawyerlandingpage().start(primaryStage); // Launch lawyerlandingpage
+            }  catch (Exception ex) {
+                ex.printStackTrace();
+                showCustomMessage("Navigation Error", "Could not load the Home page. Please ensure 'lawyerlandingpage.java' exists and is correctly compiled.", Color.RED);
+            }
+        });
+
+
+        Button aboutUsButton = new Button("About Us");
+        aboutUsButton.setStyle(navButtonStyle);
+        aboutUsButton.setOnMouseEntered(e -> aboutUsButton.setStyle(navButtonHoverStyle));
+        aboutUsButton.setOnMouseExited(e -> aboutUsButton.setStyle(navButtonStyle));
+        // --- ADDED NAVIGATION ACTION FOR ABOUT US BUTTON ---
+        aboutUsButton.setOnAction(e -> {
+            System.out.println("Navigating to About Us Page...");
+            primaryStage.close(); // Close current stage
+            try {
+                new aboutus().start(primaryStage); // Launch About Us page
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                showCustomMessage("Navigation Error", "Could not load the About Us page. Please ensure 'aboutus.java' exists and is correctly compiled.", Color.RED);
+            }
+        });
+
+        Button contactUsButton = new Button("Contact Us");
+        contactUsButton.setStyle(navButtonStyle);
+        contactUsButton.setOnMouseEntered(e -> contactUsButton.setStyle(navButtonHoverStyle));
+        contactUsButton.setOnMouseExited(e -> contactUsButton.setStyle(navButtonStyle));
+        // --- ADDED NAVIGATION ACTION FOR CONTACT US BUTTON ---
+        contactUsButton.setOnAction(e -> {
+            System.out.println("Navigating to Contact Us (About Us Page)...");
+            primaryStage.close(); // Close current stage
+            try {
+                // Assuming contact details are at the bottom of the About Us page
+                new aboutus().start(primaryStage);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                showCustomMessage("Navigation Error", "Could not load the Contact Us page. Please ensure 'aboutus.java' exists and is correctly compiled.", Color.RED);
+            }
+        });
+
+        Region spacerRight = new Region(); // This spacer will push Notifications to the far right
+        //HBox.setHgrow(spacerRight, Priority.ALWAYS); // Uncommented to make spacer work
+
+        // Notification Button
+        Button notificationButton = new Button("🔔 Notifications"); // Bell emoji or icon
+        notificationButton.setStyle(
+            "-fx-background-color: #003366; " + // Slightly lighter blue
+            "-fx-text-fill: white; " +
+            "-fx-font-size: 14px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-padding: 8px 15px; " +
+            "-fx-background-radius: 8;"
+        );
+        notificationButton.setOnMouseEntered(e -> notificationButton.setStyle(
+            "-fx-background-color: #004d99; " + // Darker on hover
+            "-fx-text-fill: white; " +
+            "-fx-font-size: 14px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-padding: 8px 15px; " +
+            "-fx-background-radius: 8;"
+        ));
+        notificationButton.setOnMouseExited(e -> notificationButton.setStyle(
+            "-fx-background-color: #003366; " +
+            "-fx-text-fill: white; " +
+            "-fx-font-size: 14px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-padding: 8px 15px; " +
+            "-fx-background-radius: 8;"
+        ));
+        notificationButton.setOnAction(e -> showCustomMessage("Notifications", "You have no new notifications.", Color.BLACK)); // Placeholder action
+
+        // Add all elements to the top panel
+        topPanel.getChildren().addAll(logoBox, homeButton, aboutUsButton, contactUsButton, spacerRight, notificationButton);
+
+
+        // --- Profile Section ---
+        VBox profileBox = new VBox(15); // Increased spacing between elements in the profile section
+        profileBox.setPadding(new Insets(30)); // Increased padding around the profile section
+        profileBox.setStyle("-fx-background-color: white; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 0);");
+        profileBox.setPrefWidth(750); // Adjusted width for better form layout
+        profileBox.setAlignment(Pos.TOP_CENTER); // Centered content within the profile box
+
+        // Lawyer Image
+        profileImageView = new ImageView();
+        try {
+            Image profileImage = new Image(LAWYER_PROFILE_IMAGE_URL);
+            profileImageView.setImage(profileImage);
+            profileImageView.setFitWidth(180); // Increased size
+            profileImageView.setFitHeight(180); // Increased size
+            profileImageView.setPreserveRatio(false); // Allow non-proportional scaling for square
+            // Clip the image to a rounded rectangle for a softer look
+            javafx.scene.shape.Rectangle clipRect = new javafx.scene.shape.Rectangle(180, 180);
+            clipRect.setArcWidth(15); // Rounded corners
+            clipRect.setArcHeight(15);
+            profileImageView.setClip(clipRect);
+        } catch (Exception e) {
+            System.err.println("Failed to load lawyer profile image: " + e.getMessage());
+            // Fallback for image loading error
+            profileImageView.setImage(new Image("https://placehold.co/180x180/CCCCCC/000000?text=No+Image")); // Changed to a more generic placeholder URL
+            profileImageView.setFitWidth(180);
+            profileImageView.setFitHeight(180);
+        }
+        profileImageView.setStyle("-fx-border-color: #001f4d; -fx-border-width: 3; -fx-border-radius: 5;"); // Border around image
+
+        // Update Profile Picture Button
+        updateProfilePicButton = new Button("Update Profile Picture");
+        updateProfilePicButton.setStyle(
+            "-fx-background-color: #4CAF50; " + // Green color for upload
+            "-fx-text-fill: white; " +
+            "-fx-font-size: 12px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-padding: 5px 10px; " +
+            "-fx-background-radius: 5;"
+        );
+        updateProfilePicButton.setOnMouseEntered(e -> updateProfilePicButton.setStyle(
+            "-fx-background-color: #45a049; " + // Darker green on hover
+            "-fx-text-fill: white; " +
+            "-fx-font-size: 12px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-padding: 5px 10px; " +
+            "-fx-background-radius: 5;"
+        ));
+        updateProfilePicButton.setOnMouseExited(e -> updateProfilePicButton.setStyle(
+            "-fx-background-color: #4CAF50; " + // Original green
+            "-fx-text-fill: white; " +
+            "-fx-font-size: 12px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-padding: 5px 10px; " +
+            "-fx-background-radius: 5;"
+        ));
+        updateProfilePicButton.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Select Profile Picture");
+            fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif")
+            );
+            java.io.File selectedFile = fileChooser.showOpenDialog(primaryStage); // Use java.io.File
+            if (selectedFile != null) {
+                try {
+                    Image newProfileImage = new Image(selectedFile.toURI().toString());
+                    profileImageView.setImage(newProfileImage);
+                    showCustomMessage("Success", "Profile picture updated!", Color.GREEN);
+                }
+                catch (Exception ex) {
+                    showCustomMessage("Error", "Failed to load image: " + ex.getMessage(), Color.RED);
+                }
+            }
+        });
+        updateProfilePicButton.setDisable(true); // Initially disabled
+
+        // Group image and update button horizontally
+        HBox imageAndButton = new HBox(10, profileImageView, updateProfilePicButton);
+        imageAndButton.setAlignment(Pos.CENTER); // Centered the image and button horizontally
+
+
+        nameText = new Text("Adv. Ujjwal Nikam");
+        nameText.setFont(Font.font("Segoe UI", FontWeight.BOLD, 28)); // Larger, bolder font
+        nameText.setFill(Color.web("#001f4d")); // Dark blue text
+
+        HBox ratingBox = new HBox(5); // Spacing for stars and text
+        ratingBox.setAlignment(Pos.CENTER); // Centered rating
+        Label starIcon = new Label("★"); // Unicode star
+        starIcon.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+        starIcon.setTextFill(Color.web("#FFD700")); // Gold color for star
+        ratingText = new Text("4.2 (200+ Reviews)"); // More specific text
+        ratingText.setFill(Color.web("#555555"));
+        ratingText.setFont(Font.font("Segoe UI", 14));
+        ratingBox.getChildren().addAll(starIcon, ratingText);
+
+        expText = new Text("9 Years Experience");
+        expText.setFont(Font.font("Segoe UI", 14));
+        expText.setFill(Color.web("#666666"));
+
+        locText = new Text("📍 Mumbai, Maharashtra | Property Issue");
+        locText.setFont(Font.font("Segoe UI", 14));
+        locText.setFill(Color.web("#666666"));
+
+        // Initialize editable fields with current data
+        bioTextArea = createStyledTextArea("I am holding 9 years of experience at the Bar, I have attained proficiency with fair degree of success on pleadings, arguments, art of representation and meticulous adherence to procedures. In the entire course of his career I have built up a good will in the legal fraternity. I have even engaged in enlightening people to educate their up coming generations and for that he has even actively participated in establishing some effective education institutions in Pune City", 5);
+        
+        phoneField = createStyledTextField("9876543210"); // Example data
+        locationField = createStyledTextField("Mumabi, Maharashtra"); // Example data
+        experienceField = createStyledTextField("9"); // Example data
+
+        // Specialization ComboBox (from signup page)
+        specializationComboBox = createStyledComboBox(
+            "Criminal Law", // Default selected
+            "Criminal Law", "Civil Law", "Family Law", "Property Law",
+            "Cyber Law", "Corporate Law", "Consumer Law", "Environmental Law",
+            "Intellectual Property Law", "Tax Law", "Labour Law", "Constitutional Law",
+            "Arbitration & Mediation", "Immigration Law", "Human Rights Law", "Banking & Finance Law"
+        );
+        specializationComboBox.setDisable(true); // Initially disabled
+
+        // Courts of Practice ComboBox
+        courtComboBox = createStyledComboBox(
+            "Select Court", // Default prompt
+            "Supreme Court of India", "All High Courts (India)", "Bombay High Court", "Delhi High Court",
+            "Calcutta High Court", "Madras High Court", "Allahabad High Court", "Karnataka High Court",
+            "Gujarat High Court", "Punjab and Haryana High Court", "Kerala High Court",
+            "Magistrate Court", "Sessions Court", "District Court",
+            "Consumer Court", "Family Court", "Labour Court",
+            "Tribunal (e.g., NGT, NCLT, DRT)", "Armed Forces Tribunal"
+        );
+        courtComboBox.setDisable(true); // Initially disabled
+        courtComboBox.getSelectionModel().select("Bombay High Court"); // Example default selection
+
+
+        langTextArea = createStyledTextArea("English, Hindi, Marathi, Gujarati, Punjabi", 1);
+        eduTextArea = createStyledTextArea("LL.B from Government Law College, Mumbai (2015)\nEnrolled with Bar Council of Maharashtra and Goa (2016)", 2);
+
+
+        // Edit/Save Button
+        editSaveButton = new Button("Edit Profile");
+        editSaveButton.setStyle(
+            "-fx-background-color: #001f4d; " +
+            "-fx-text-fill: white; " +
+            "-fx-font-size: 16px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-padding: 10px 20px; " +
+            "-fx-background-radius: 8; " +
+            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 0);"
+        );
+        editSaveButton.setOnMouseEntered(e -> editSaveButton.setStyle(
+            "-fx-background-color: #003366; " +
+            "-fx-text-fill: white; " +
+            "-fx-font-size: 16px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-padding: 10px 20px; " +
+            "-fx-background-radius: 8; " +
+            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 0);"
+        ));
+        editSaveButton.setOnMouseExited(e -> editSaveButton.setStyle(
+            "-fx-background-color: #001f4d; " +
+            "-fx-text-fill: white; " +
+            "-fx-font-size: 16px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-padding: 10px 20px; " +
+            "-fx-background-radius: 8; " +
+            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 0);"
+        ));
+        editSaveButton.setOnAction(e -> toggleEditMode());
+        VBox.setMargin(editSaveButton, new Insets(20, 0, 0, 0)); // Margin above button
+
+
+        profileBox.getChildren().addAll(
+            imageAndButton, nameText, ratingBox, expText, locText, new javafx.scene.control.Separator(), // Corrected Separator usage
+            createInfoBox("Biography", bioTextArea),
+            createInfoBox("Phone Number", phoneField),
+            createInfoBox("Location", locationField),
+            createInfoBox("Years of Experience", experienceField),
+            createInfoBox("Specialization", specializationComboBox),
+            createInfoBox("Courts of Practice", courtComboBox),
+            createInfoBox("Languages", langTextArea),
+            createInfoBox("Education & Bar Admission", eduTextArea),
+            editSaveButton
+        );
+
+        // Initially set all editable fields to non-editable
+        setEditableFields(false);
+
+        // --- Main Layout ---
+        ScrollPane mainScrollPane = new ScrollPane(profileBox);
+        mainScrollPane.setFitToWidth(true); // Ensures the content within the scroll pane fits its width
+        mainScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); // Hides horizontal scroll bar
+        mainScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED); // Shows vertical scroll bar only when needed
+        mainScrollPane.setStyle("-fx-background-color: transparent; -fx-padding: 0;"); // Transparent background for scroll pane
+
+        VBox root = new VBox();
+        root.getChildren().addAll(topPanel, mainScrollPane); // Add top panel and scroll pane to the root
+        root.setStyle("-fx-background-color: #F4F6F9;"); // Light grey background for overall window
+        root.setAlignment(Pos.TOP_CENTER); // Center the content horizontally within the root VBox
+
+        Scene scene = new Scene(root, 1550, 890); // Adjusted scene size
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    /**
+     * Helper method to enable or disable editable fields based on the 'editable' flag.
+     * @param editable True to make fields editable, false otherwise.
+     */
+    private void setEditableFields(boolean editable) {
+        bioTextArea.setEditable(editable);
+        phoneField.setEditable(editable);
+        locationField.setEditable(editable);
+        experienceField.setEditable(editable);
+        specializationComboBox.setDisable(!editable); // ComboBox uses setDisable
+        courtComboBox.setDisable(!editable); // ComboBox uses setDisable
+        langTextArea.setEditable(editable);
+        eduTextArea.setEditable(editable);
+        updateProfilePicButton.setDisable(!editable); // Enable/disable profile pic button
+    }
+
+    /**
+     * Toggles the edit mode for the profile.
+     * Switches between "Edit Profile" and "Save Profile" states.
+     * Updates displayed text based on input field values when saving.
+     */
+    private void toggleEditMode() {
+        isEditMode = !isEditMode;
+        setEditableFields(isEditMode);
+        editSaveButton.setText(isEditMode ? "Save Profile" : "Edit Profile");
+
+        if (!isEditMode) {
+            // When switching from Edit to Save, update the display Text nodes
+            // In a real application, you would save this data to a database here.
+            expText.setText(experienceField.getText() + " Years Experience");
+            locText.setText("📍 " + locationField.getText() + " | " + specializationComboBox.getValue());
+            
+            showCustomMessage("Profile Saved", "Your profile has been updated.", Color.GREEN);
+        } else {
+            // When switching to Edit, no specific action needed for Text nodes as they are not directly editable.
+            // Their values are reflected by the editable TextFields.
+        }
+    }
+
+    /**
+     * Displays a custom message dialog.
+     * @param title The title of the dialog.
+     * @param message The message to display.
+     * @param textColor The color of the message text.
+     */
+    private void showCustomMessage(String title, String message, Color textColor) {
+        Stage dialogStage = new Stage();
+        dialogStage.initOwner(primaryStage); // Set owner to primary stage
+        dialogStage.initModality(Modality.APPLICATION_MODAL); // Ensure it's a modal dialog
+        dialogStage.setTitle(title);
+        dialogStage.setResizable(false); // Prevent resizing of the dialog
+
+        Label messageLabel = new Label(message);
+        messageLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 16));
+        messageLabel.setTextFill(textColor);
+        messageLabel.setWrapText(true); // Allow text to wrap
+        messageLabel.setTextAlignment(TextAlignment.CENTER);
+        messageLabel.setMaxWidth(300); // Max width for the message label
+
+        Button okButton = new Button("OK");
+        okButton.setStyle(
+            "-fx-background-color: #001f4d; " +
+            "-fx-text-fill: white; " +
+            "-fx-font-size: 14px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-padding: 8px 15px; " +
+            "-fx-background-radius: 5;"
+        );
+        okButton.setOnAction(e -> dialogStage.close()); // Close dialog on OK button click
+
+        VBox dialogLayout = new VBox(20, messageLabel, okButton); // Spacing between message and button
+        dialogLayout.setAlignment(Pos.CENTER); // Center content in dialog
+        dialogLayout.setPadding(new Insets(20)); // Padding around dialog content
+        dialogLayout.setStyle("-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 0);");
+
+        Scene dialogScene = new Scene(dialogLayout, 350, 200); // Fixed size for dialog scene
+        dialogStage.setScene(dialogScene);
+        dialogStage.showAndWait(); // Show dialog and wait for it to be closed
+    }
+
+    /**
+     * Helper method to create a styled TextField.
+     * @param initialText The initial text or prompt text for the TextField.
+     * @return A styled TextField instance.
+     */
+    private TextField createStyledTextField(String initialText) {
+        TextField field = new TextField(initialText); // Set initial text directly
+        field.setStyle("-fx-background-color: #f0f0f0; -fx-border-color: #cccccc; -fx-border-radius: 5; -fx-background-radius: 5; -fx-padding: 10px;");
+        field.setPrefWidth(300); // Consistent width
+        field.setMaxWidth(350);
+        return field;
+    }
+
+    /**
+     * Helper method to create a styled ComboBox.
+     * @param promptText The prompt text for the ComboBox.
+     * @param items Variable arguments for items to add to the ComboBox.
+     * @return A styled ComboBox instance.
+     */
+    private ComboBox<String> createStyledComboBox(String promptText, String... items) {
+        ComboBox<String> comboBox = new ComboBox<>();
+        comboBox.setPromptText(promptText);
+        comboBox.getItems().addAll(items);
+        comboBox.setPrefWidth(300); // Consistent width
+        comboBox.setMaxWidth(350);
+        // Styling for the ComboBox itself and its button
+        comboBox.setStyle("-fx-background-color: #f0f0f0; -fx-border-color: #cccccc; -fx-border-radius: 5; -fx-background-radius: 5;");
+        // Styling for the list cell (items in the dropdown)
+        comboBox.setButtonCell(new ListCell<String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(item);
+                if (item != null) {
+                    setStyle("-fx-padding: 8px;"); // Padding for selected item in button
+                }
+            }
+        });
+        return comboBox;
+    }
+
+    /**
+     * Helper method to create a styled TextArea.
+     * @param initialText The initial text for the TextArea.
+     * @param prefRowCount The preferred number of rows for the TextArea.
+     * @return A styled TextArea instance.
+     */
+    private TextArea createStyledTextArea(String initialText, int prefRowCount) {
+        TextArea textArea = new TextArea(initialText); // Set initial text directly
+        textArea.setPrefRowCount(prefRowCount);
+        textArea.setWrapText(true); // Enable word wrap
+        textArea.setStyle("-fx-background-color: #f0f0f0; -fx-border-color: #cccccc; -fx-border-radius: 5; -fx-background-radius: 5; -fx-padding: 10px;");
+        textArea.setPrefWidth(300); // Consistent width
+        textArea.setMaxWidth(350);
+        return textArea;
+    }
+
+    // Helper function for styled VBoxes with editable content - MOVED OUTSIDE start()
+    VBox createInfoBox(String title, Node contentNode) {
+        Label titleLabel = new Label(title);
+        titleLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 16));
+        titleLabel.setTextFill(Color.web("#001f4d"));
+        
+        VBox box = new VBox(5, titleLabel, contentNode);
+        box.setAlignment(Pos.CENTER); // Centered content within info box
+        box.setPadding(new Insets(10, 0, 0, 0)); // Top padding for separation
+        return box;
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
+
+
+
+
+
+
+
+
+
+

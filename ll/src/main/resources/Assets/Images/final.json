@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "bridge-to-law-58416",
+  "private_key_id": "ad83176c851c72e8a0b9466ebd4d11b41419839c",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQC7tlw6Mi8HQiHs\nXEBSzBW4rLSAoADRTMWUdJEeudG1Cq4E3PYfY3AgtHaiC9IQ3T/Uh+1cOPecNo/K\n78pV0Phpxf/B/WDyWkM9OTN9XF/5za3B8mu853zOld7ly1aXk9QcaisHIe9pSNxo\nYCTxe2scqhwx5V3dZfeQJJT1tARbwKTwtpEBLLtoqgmP1N88dmfS4U7GUFn/ecb5\ngWaZegA4v4JTVZG4Uxx6FvltBN8lsnxWzNhEhRlifDmRWtFI5a0y6DlGc81OuTIh\nv41BmyQSw+0hCbTBZD9gD04PayXaAoAw6V3tcuYWhT8kgfMkRCYkjr7tpsxCNvrF\nRmm+WXkBAgMBAAECggEACXb9+n86SNLoU/so0SPyOnAW399xexw0YDJqeNKkxMyn\njp43mMiSSEvhKXWQH4KQa954tOw4a/uCT5i8qowRYn/1z+m/QCkV99nRA1KrkjRx\nPPTEwu8nJ2F+LjcNBDKTgOVHiyIGaNggKPEkG7r94SGgr1Fh5L5196IokqUDjT64\nrGTDDDTyGm9VaatVh22LrqN1VgCPO9231z+di+mw3N2ZdT13e7RHNq6qY2tNfy38\nyGxJmkyP9jesU602qCpaz9CJu/PBBAeaoPDaAsnuhRWfYMeE3HcV6uVHReDhhaZQ\nQefp/86ksqF5RmxmU8RLCDX/35KLGZdP0RC4f8NeGQKBgQD31l7ObQWz5eixihpV\n61O0TzLHO3WyRSm+S6HFusEWvRz+rhNEf5cqpJcYp2uuFhpnXnvZLhYSKJ5FG6GN\nlP0B/4tcURU35lyyTnHOVZPOGHIvtBy4sDEtsRMMdUWD9yI0JpcVukrzJFd1fOPl\nDsjmzCHS2qGB6wenQlxeT1KDDQKBgQDB5Qxi3eeOqqhBXLVeiHtvSaVP/9eTqzWt\nk7Ephm09ujHi6FCxnBG/ypXprKNirpBgZOKjZSFr9EnUILJ1wgHs/5XqhDmr7fMC\n8KqY82SMFuUNYdsALKDGnc+BE6We5rlCYNedjgR3oY7TikgLNGH4EpVuuNoWYu2t\nbMsq9x0gxQKBgD/M0LUlPa2VBvUFT0hE/1RQewrs1Jyiz18siyWisOhQoLEzUMR2\ncAzLOBZhqweyqvNnUEyVX5snF69EsK8I5qToCxEl0meEhuJj7Uonn5gTlPmQzUAC\nI3bWucegPNf++7AfKw+t2HOFLHqTPvuNdcxsSlzEaYVPYrX9EFg65UvVAoGAdH76\nAizxg3ZlwV/CWRoHj8Xf3UEKdV7Y0YF7YEe0OvI0JvEOCqiKwYEmsU9Ym2HmvQPg\nZ+vLOOF9ukYq8zWtkoe9uznWrMY6y/lthpg2QTVASdoRivlFYBBRLGxxhhd6F7e3\n1KIPbRFUjyT2REUk17fSsMO/xNOLmjdTmmz+w0ECgYAo+7Oy6ksy0YqMEdq7LrEN\n0S2WKVnD5QXggt6mAtW2HwtafjuFrELnFwJsHzJiomLt+nLcrPr2jh7yQpYy5OZj\n3SM8RC+gsVrxbWFBBNVR/twn5+39JmkwLagoOu/RkixZXy5EDIZFZCcT9VkyZXSv\nTiZxWrnvwm/G45IbX5A98g==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-fbsvc@bridge-to-law-58416.iam.gserviceaccount.com",
+  "client_id": "114486959182551520049",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40bridge-to-law-58416.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

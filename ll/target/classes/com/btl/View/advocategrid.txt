@@ -1,0 +1,1169 @@
+/*package com.btl.View;
+
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.stage.Stage;
+
+public class AdvocateGrid extends Application {
+
+    // Overloaded start method to allow launching with specific parameters
+    public void start(Stage primaryStage, String selectedCity, String selectedArea, String selectedLang) {
+        VBox mainLayout = new VBox(10);
+        mainLayout.setPadding(new Insets(20));
+
+        // Title
+        HBox topHeader = new HBox();
+        topHeader.setAlignment(Pos.CENTER_LEFT);
+        Label siteTitle = new Label("Bridge To Law");
+        siteTitle.setFont(Font.font("Arial", 24));
+        siteTitle.setTextFill(Color.web("#031D4A"));
+        topHeader.getChildren().add(siteTitle);
+
+        // Info
+        String infoText = String.format("🔍 Showing results for %s Lawyers in %s", selectedArea, selectedCity);
+        Label searchInfo = new Label(infoText);
+        searchInfo.setFont(Font.font("Arial", 16));
+        searchInfo.setPadding(new Insets(10, 0, 20, 0));
+
+        // Responsive Card Container using FlowPane
+        FlowPane cardFlow = new FlowPane();
+        cardFlow.setHgap(20);
+        cardFlow.setVgap(20);
+        cardFlow.setPadding(new Insets(10));
+        cardFlow.setPrefWrapLength(1000); // initial preferred width
+        cardFlow.setAlignment(Pos.TOP_LEFT);
+
+        String imgPath = "file:ll/src/main/resources/Assets/Images/female icon.png";
+        String imgPath2 = "file:ll/src/main/resources/Assets/Images/male icon.png";
+
+        // Add cards with navigation
+        addLawyerCard(primaryStage, cardFlow, "Neha Sharma", "Criminal", "10 Years Experience", "4.8/5", selectedCity, imgPath);
+        addLawyerCard(primaryStage, cardFlow, "Rajeev Mehra", "Labour", "12 Years Experience", "4.5/5", selectedCity, imgPath2);
+        addLawyerCard(primaryStage, cardFlow, "Kavita Singh", "Criminal", "9 Years Experience", "4.7/5", selectedCity, imgPath);
+        addLawyerCard(primaryStage, cardFlow, "Sameer Patil", "Labour", "7 Years Experience", "4.6/5", selectedCity, imgPath2);
+        addLawyerCard(primaryStage, cardFlow, "Arjun Rana", "Family", "8 Years Experience", "4.4/5", selectedCity, imgPath2);
+        addLawyerCard(primaryStage, cardFlow, "Pooja Iyer", "Property", "11 Years Experience", "4.9/5", selectedCity, imgPath);
+        addLawyerCard(primaryStage, cardFlow, "Manoj Desai", "Divorce", "6 Years Experience", "4.3/5", selectedCity, imgPath2);
+        addLawyerCard(primaryStage, cardFlow, "Sonal Joshi", "Criminal", "5 Years Experience", "4.6/5", selectedCity, imgPath);
+        addLawyerCard(primaryStage, cardFlow, "Amit Kulkarni", "Cyber Crime", "13 Years Experience", "4.9/5", selectedCity, imgPath2);
+        addLawyerCard(primaryStage, cardFlow, "Meera Deshpande", "Civil", "15 Years Experience", "4.7/5", selectedCity, imgPath);
+
+        ScrollPane scrollPane = new ScrollPane(cardFlow);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setPannable(true);
+        scrollPane.setStyle("-fx-background-color: transparent;");
+
+        mainLayout.getChildren().addAll(topHeader, searchInfo, scrollPane);
+
+        Scene scene = new Scene(mainLayout, 1000, 700);
+        primaryStage.setTitle("Bridge To Law - Lawyer Directory");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    private void addLawyerCard(Stage primaryStage, Pane parent, String name, String type, String exp, String rating, String city, String imgPath) {
+        VBox card = new VBox(10);
+        card.setPadding(new Insets(15));
+        card.setPrefWidth(300);
+        card.setStyle("-fx-background-color: #f5f5f5; -fx-border-radius: 8px; -fx-background-radius: 8px;");
+
+        card.setOnMouseEntered(e -> card.setStyle(
+                "-fx-background-color: #f5f5f5; -fx-border-radius: 8px; -fx-background-radius: 8px; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 4);"
+        ));
+        card.setOnMouseExited(e -> card.setStyle(
+                "-fx-background-color: #f5f5f5; -fx-border-radius: 8px; -fx-background-radius: 8px;"
+        ));
+
+        HBox imageBox = new HBox();
+        imageBox.setAlignment(Pos.CENTER);
+        ImageView image = new ImageView(new Image(imgPath));
+        image.setFitWidth(60);
+        image.setFitHeight(60);
+        imageBox.getChildren().add(image);
+
+        Label nameLabel = new Label("Adv. " + name);
+        nameLabel.setFont(Font.font("Arial", 18));
+        nameLabel.setTextFill(Color.BLACK);
+
+        Label ratingLabel = new Label("⭐ " + rating);
+        Label expLabel = new Label("📅 " + exp);
+        Label cityLabel = new Label("📍 " + city);
+
+        Label tagLabel = new Label(type);
+        tagLabel.setStyle("-fx-background-color: #031D4A; -fx-text-fill: white; -fx-padding: 3 8 3 8; -fx-background-radius: 5px;");
+
+        Button viewButton = new Button("View Profile");
+        viewButton.setStyle("-fx-background-color: #031D4A; -fx-text-fill: white;");
+        viewButton.setOnAction(e -> {
+            System.out.println("Opening profile for: " + name);
+            primaryStage.close(); // Close the current AdvocateGrid stage
+            try {
+                // Pass the lawyer's name to the AdvocateBiography class
+                new AdvocateBiography().start(new Stage());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        card.getChildren().addAll(imageBox, nameLabel, ratingLabel, expLabel, cityLabel, tagLabel, viewButton);
+        parent.getChildren().add(card);
+    }
+
+    // Standard start method as required by JavaFX, now delegating to the
+    // parameterized one. You can remove the old "unimplemented" one.
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        // Example usage if you were to launch directly
+        start(primaryStage, "Mumbai", "Criminal", "English");
+    }
+}*/
+
+
+/*package com.btl.View;
+
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
+public class AdvocateGrid extends Application {
+
+    // --- Image URLs ---
+    private static final String BACKGROUND_IMAGE_URL = "Assets/Images/normal.jpg"; // Placeholder background image
+    private static final String FEMALE_ICON_PATH = "file:ll/src/main/resources/Assets/Images/female icon.png";
+    private static final String MALE_ICON_PATH = "file:ll/src/main/resources/Assets/Images/male icon.png";
+
+    // Standard start method as required by JavaFX, now delegating to the
+    // parameterized one.
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        // Example usage if you were to launch directly without parameters
+        start(primaryStage, "Mumbai", "Criminal", "English");
+    }
+
+    // Overloaded start method to allow launching with specific parameters
+    public void start(Stage primaryStage, String selectedCity, String selectedArea, String selectedLang) {
+        primaryStage.setTitle("Bridge To Law - Lawyer Directory");
+
+        // --- Navigation Bar ---
+        HBox navBar = getNavBar(primaryStage);
+
+        // --- Main Content Area ---
+        VBox mainContentLayout = new VBox(10);
+        mainContentLayout.setPadding(new Insets(20));
+        mainContentLayout.setAlignment(Pos.TOP_CENTER); // Align content to top-center
+
+        // Info
+        String infoText = String.format("🔍 Showing results for %s Lawyers in %s", selectedArea, selectedCity);
+        Label searchInfo = new Label(infoText);
+        searchInfo.setFont(Font.font("Segoe UI", 16)); // Consistent font
+        searchInfo.setTextFill(Color.web("#f0f5fdff")); // Dark blue text
+        searchInfo.setPadding(new Insets(10, 0, 20, 0));
+
+        // Responsive Card Container using FlowPane
+        FlowPane cardFlow = new FlowPane();
+        cardFlow.setHgap(25); // Increased horizontal gap
+        cardFlow.setVgap(25); // Increased vertical gap
+        cardFlow.setPadding(new Insets(10));
+        cardFlow.setPrefWrapLength(950); // Adjusted for better wrapping on 1000px width
+        cardFlow.setAlignment(Pos.CENTER); // Center the cards within the flow pane
+
+        // Add cards with navigation
+        addLawyerCard(primaryStage, cardFlow, "Neha Sharma", "Criminal", "10 Years Experience", "4.8/5", selectedCity, FEMALE_ICON_PATH);
+        addLawyerCard(primaryStage, cardFlow, "Rajeev Mehra", "Labour", "12 Years Experience", "4.5/5", selectedCity, MALE_ICON_PATH);
+        addLawyerCard(primaryStage, cardFlow, "Kavita Singh", "Criminal", "9 Years Experience", "4.7/5", selectedCity, FEMALE_ICON_PATH);
+        addLawyerCard(primaryStage, cardFlow, "Sameer Patil", "Labour", "7 Years Experience", "4.6/5", selectedCity, MALE_ICON_PATH);
+        addLawyerCard(primaryStage, cardFlow, "Arjun Rana", "Family", "8 Years Experience", "4.4/5", selectedCity, MALE_ICON_PATH);
+        addLawyerCard(primaryStage, cardFlow, "Pooja Iyer", "Property", "11 Years Experience", "4.9/5", selectedCity, FEMALE_ICON_PATH);
+        addLawyerCard(primaryStage, cardFlow, "Manoj Desai", "Divorce", "6 Years Experience", "4.3/5", selectedCity, MALE_ICON_PATH);
+        addLawyerCard(primaryStage, cardFlow, "Sonal Joshi", "Criminal", "5 Years Experience", "4.6/5", selectedCity, FEMALE_ICON_PATH);
+        addLawyerCard(primaryStage, cardFlow, "Amit Kulkarni", "Cyber Crime", "13 Years Experience", "4.9/5", selectedCity, MALE_ICON_PATH);
+        addLawyerCard(primaryStage, cardFlow, "Meera Deshpande", "Civil", "15 Years Experience", "4.7/5", selectedCity, FEMALE_ICON_PATH);
+
+        ScrollPane scrollPane = new ScrollPane(cardFlow);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setPannable(true);
+        scrollPane.setStyle("-fx-background-color: transparent;"); // Transparent background for scroll pane
+
+        mainContentLayout.getChildren().addAll(searchInfo, scrollPane);
+
+        // --- Background Image for the Content Area ---
+        ImageView backgroundImage = new ImageView(new Image(BACKGROUND_IMAGE_URL));
+        backgroundImage.setFitWidth(1000); // Will be bound to StackPane width
+        backgroundImage.setPreserveRatio(true);
+        backgroundImage.setOpacity(10); // Reduced opacity for subtlety
+        backgroundImage.setManaged(false); // Do not let layout manager manage its size/position
+
+        // Create a StackPane to layer the background image and the scrollable content
+        StackPane contentStack = new StackPane();
+        contentStack.getChildren().addAll(backgroundImage, mainContentLayout);
+        StackPane.setAlignment(backgroundImage, Pos.TOP_CENTER); // Align background image
+        backgroundImage.fitWidthProperty().bind(contentStack.widthProperty()); // Make background image responsive
+
+        VBox root = new VBox();
+        root.getChildren().addAll(navBar, contentStack);
+        root.setStyle("-fx-background-color: #f0f2f5;"); // Light grey background for the entire window
+
+        Scene scene = new Scene(root, 1000, 700);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    private HBox getNavBar(Stage primaryStage) {
+        HBox navBar = new HBox(0);
+        navBar.setAlignment(Pos.CENTER_LEFT);
+        navBar.setPadding(new Insets(15, 30, 15, 30));
+        navBar.setStyle("-fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-width: 0 0 1px 0;");
+
+        // Left section: "Bridge To Law." logo
+        VBox logoBox = new VBox(-10);
+        Label bridgeLabel = new Label("Bridge");
+        bridgeLabel.setStyle("-fx-text-fill: black; -fx-font-size: 32px; -fx-font-weight: bold;");
+        Label toLawLabel = new Label("To Law.");
+        toLawLabel.setStyle("-fx-text-fill: black; -fx-font-size: 32px; -fx-font-weight: bold;");
+        logoBox.getChildren().addAll(bridgeLabel, toLawLabel);
+        logoBox.setAlignment(Pos.CENTER_LEFT);
+        HBox.setMargin(logoBox, new Insets(0, 60, 0, 0));
+
+        // Center section: Main navigation links
+        HBox mainNavLinks = new HBox(25);
+        mainNavLinks.setAlignment(Pos.CENTER_LEFT);
+
+        String mainNavLinkStyle = "-fx-background-color: transparent; " +
+                                  "-fx-text-fill: black; " +
+                                  "-fx-font-size: 14px; " +
+                                  "-fx-font-weight: normal; " +
+                                  "-fx-padding: 5px 0px;";
+
+        String mainNavLinkHoverStyle = "-fx-background-color: transparent; " +
+                                       "-fx-text-fill: #001f4d; " +
+                                       "-fx-font-size: 14px; " +
+                                       "-fx-font-weight: normal;";
+
+        Button homeButton = new Button("Home");
+        Button findLawyerButton = new Button("Find a Lawyer");
+        Button aboutUsButton = new Button("About Us");
+        Button legalNewsButton = new Button("Legal News");
+        Button contactUsButton = new Button("Contact Us");
+
+        homeButton.setStyle(mainNavLinkStyle);
+        // Highlight "Find a Lawyer" as the current page
+        findLawyerButton.setStyle(mainNavLinkHoverStyle + "-fx-underline: true;");
+        aboutUsButton.setStyle(mainNavLinkStyle);
+        legalNewsButton.setStyle(mainNavLinkStyle);
+        contactUsButton.setStyle(mainNavLinkStyle);
+
+        // Hover effects for navigation buttons
+        homeButton.setOnMouseEntered(e -> homeButton.setStyle(mainNavLinkHoverStyle));
+        homeButton.setOnMouseExited(e -> homeButton.setStyle(mainNavLinkStyle));
+        findLawyerButton.setOnMouseEntered(e -> findLawyerButton.setStyle(mainNavLinkHoverStyle));
+        findLawyerButton.setOnMouseExited(e -> findLawyerButton.setStyle(mainNavLinkHoverStyle + "-fx-underline: true;")); // Keep underline on exit
+        aboutUsButton.setOnMouseEntered(e -> aboutUsButton.setStyle(mainNavLinkHoverStyle));
+        aboutUsButton.setOnMouseExited(e -> aboutUsButton.setStyle(mainNavLinkStyle));
+        legalNewsButton.setOnMouseEntered(e -> legalNewsButton.setStyle(mainNavLinkHoverStyle));
+        legalNewsButton.setOnMouseExited(e -> legalNewsButton.setStyle(mainNavLinkStyle));
+        contactUsButton.setOnMouseEntered(e -> contactUsButton.setStyle(mainNavLinkHoverStyle));
+        contactUsButton.setOnMouseExited(e -> contactUsButton.setStyle(mainNavLinkStyle));
+
+        mainNavLinks.getChildren().addAll(homeButton, findLawyerButton, aboutUsButton, legalNewsButton, contactUsButton);
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        navBar.getChildren().addAll(logoBox, mainNavLinks, spacer);
+
+        // --- Navigation Actions ---
+        homeButton.setOnAction(e -> {
+            System.out.println("Navigating to Home (landingPage)...");
+            primaryStage.close();
+            try {
+                new landingPage().start(new Stage());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                showErrorPopup(primaryStage, "Navigation Error", "Could not load the Home page. Please ensure 'landingPage.java' exists and is correctly compiled.");
+            }
+        });
+
+        aboutUsButton.setOnAction(e -> {
+            System.out.println("Navigating to About Us Page...");
+            primaryStage.close();
+            try {
+                new aboutus().start(new Stage());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                showErrorPopup(primaryStage, "Navigation Error", "Could not load the About Us page. Please ensure 'aboutus.java' exists and is correctly compiled.");
+            }
+        });
+
+        legalNewsButton.setOnAction(e -> {
+            System.out.println("Navigating to Legal News (landingPage)...");
+            primaryStage.close();
+            try {
+                // To scroll directly to the "Latest Legal News" section on landingPage,
+                // the landingPage class itself would need to be modified to accept a parameter
+                // or have a public method to trigger that scroll after it's displayed.
+                new landingPage().start(new Stage());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                showErrorPopup(primaryStage, "Navigation Error", "Could not load the Legal News page. Please ensure 'landingPage.java' exists and is correctly compiled.");
+            }
+        });
+
+        contactUsButton.setOnAction(e -> {
+            System.out.println("Navigating to Contact Us (About Us Page bottom)...");
+            primaryStage.close();
+            try {
+                // To scroll directly to the bottom of the About Us page,
+                // the aboutus class itself would need to be modified to accept a parameter
+                // or have a public method to trigger that scroll after it's displayed.
+                new aboutus().start(new Stage());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                showErrorPopup(primaryStage, "Navigation Error", "Could not load the Contact Us page. Please ensure 'aboutus.java' exists and is correctly compiled.");
+            }
+        });
+
+        return navBar;
+    }
+
+    private void addLawyerCard(Stage primaryStage, Pane parent, String name, String type, String exp, String rating, String city, String imgPath) {
+        VBox card = new VBox(8); // Reduced spacing for a tighter look
+        card.setPadding(new Insets(15));
+        card.setPrefWidth(280); // Adjusted width for better fit in FlowPane
+        card.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: #e0e0e0; -fx-border-width: 1px; -fx-background-radius: 10px; -fx-border-radius: 10px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 4);");
+
+        card.setOnMouseEntered(e -> card.setStyle(
+                "-fx-background-color: #F0F8FF; -fx-border-color: #001f4d; -fx-border-width: 2px; -fx-background-radius: 10px; -fx-border-radius: 10px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 15, 0, 0, 6);"
+        ));
+        card.setOnMouseExited(e -> card.setStyle(
+                "-fx-background-color: #FFFFFF; -fx-border-color: #e0e0e0; -fx-border-width: 1px; -fx-background-radius: 10px; -fx-border-radius: 10px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 4);"
+        ));
+
+        HBox imageBox = new HBox();
+        imageBox.setAlignment(Pos.CENTER);
+        ImageView image = new ImageView(new Image(imgPath));
+        image.setFitWidth(80); // Larger image
+        image.setFitHeight(80);
+        image.setPreserveRatio(false); // Allow non-proportional scaling for square
+        image.setClip(new javafx.scene.shape.Rectangle(80, 80)); // Clip to square
+        image.setStyle("-fx-border-color: #001f4d; -fx-border-width: 2; -fx-border-radius: 5;"); // Border around image
+        imageBox.getChildren().add(image);
+
+        Label nameLabel = new Label("Adv. " + name);
+        nameLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 20)); // Bolder, larger font
+        nameLabel.setTextFill(Color.web("#001f4d"));
+
+        Label ratingLabel = new Label("⭐ " + rating);
+        ratingLabel.setFont(Font.font("Segoe UI", 14));
+        ratingLabel.setTextFill(Color.web("#555555"));
+
+        Label expLabel = new Label("💼 " + exp); // Changed icon
+        expLabel.setFont(Font.font("Segoe UI", 14));
+        expLabel.setTextFill(Color.web("#555555"));
+
+        Label cityLabel = new Label("📍 " + city);
+        cityLabel.setFont(Font.font("Segoe UI", 14));
+        cityLabel.setTextFill(Color.web("#555555"));
+
+        Label tagLabel = new Label(type);
+        tagLabel.setStyle("-fx-background-color: #607D8B; -fx-text-fill: white; -fx-padding: 4 10 4 10; -fx-background-radius: 15px; -fx-font-size: 12px;"); // More rounded, slightly larger padding
+
+        Button viewButton = new Button("View Profile");
+        viewButton.setStyle(
+            "-fx-background-color: #001f4d; " +
+            "-fx-text-fill: white; " +
+            "-fx-font-size: 14px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-padding: 8px 15px; " +
+            "-fx-background-radius: 5; " +
+            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 0);"
+        );
+        viewButton.setOnMouseEntered(e -> viewButton.setStyle(
+            "-fx-background-color: #003366; " +
+            "-fx-text-fill: white; " +
+            "-fx-font-size: 14px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-padding: 8px 15px; " +
+            "-fx-background-radius: 5; " +
+            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 8, 0, 0, 0);"
+        ));
+        viewButton.setOnMouseExited(e -> viewButton.setStyle(
+            "-fx-background-color: #001f4d; " +
+            "-fx-text-fill: white; " +
+            "-fx-font-size: 14px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-padding: 8px 15px; " +
+            "-fx-background-radius: 5; " +
+            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 0);"
+        ));
+        viewButton.setPrefWidth(Double.MAX_VALUE); // Make button fill card width
+
+        card.getChildren().addAll(imageBox, nameLabel, ratingLabel, expLabel, cityLabel, tagLabel, viewButton);
+        parent.getChildren().add(card);
+    }
+
+    /**
+     * Displays a custom error popup.
+     * @param ownerStage The primary stage, used for modality.
+     * @param title The title of the popup.
+     * @param message The message to display in the popup.
+     */
+    /*private void showErrorPopup(Stage ownerStage, String title, String message) {
+        Stage popupStage = new Stage();
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.initOwner(ownerStage);
+        popupStage.setTitle(title);
+
+        VBox popupContent = new VBox(20);
+        popupContent.setAlignment(Pos.CENTER);
+        popupContent.setPadding(new Insets(30));
+        popupContent.setStyle("-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 0);");
+
+        // Red 'X' icon for error
+        Label errorLabel = new Label("✖"); // Unicode multiplication sign for error
+        errorLabel.setFont(Font.font("Arial", FontWeight.BOLD, 60));
+        errorLabel.setTextFill(Color.web("#D32F2F")); // Red color
+
+        Label messageLabel = new Label(message);
+        messageLabel.setFont(Font.font("Segoe UI", 16));
+        messageLabel.setTextFill(Color.web("#333333"));
+        messageLabel.setWrapText(true);
+        messageLabel.setTextAlignment(TextAlignment.CENTER);
+
+        Button okButton = new Button("OK");
+        okButton.setStyle(
+            "-fx-background-color: #001f4d; " +
+            "-fx-text-fill: white; " +
+            "-fx-font-size: 14px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-padding: 8px 15px; " +
+            "-fx-background-radius: 5;"
+        );
+        okButton.setOnAction(e -> popupStage.close());
+
+        popupContent.getChildren().addAll(errorLabel, messageLabel, okButton);
+
+        Scene popupScene = new Scene(popupContent);
+        popupStage.setScene(popupScene);
+        popupStage.showAndWait();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}*/
+
+
+/*package com.btl.View;
+
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
+public class AdvocateGrid extends Application {
+
+    // --- Image URLs ---
+    private static final String BACKGROUND_IMAGE_URL = "Assets/Images/normal.jpg"; // Placeholder background image
+    private static final String FEMALE_ICON_PATH = "file:ll/src/main/resources/Assets/Images/female icon.png";
+    private static final String MALE_ICON_PATH = "file:ll/src/main/resources/Assets/Images/male icon.png";
+
+    // Standard start method as required by JavaFX, now delegating to the
+    // parameterized one.
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        // Example usage if you were to launch directly without parameters
+        start(primaryStage, "Mumbai", "Criminal", "English");
+    }
+
+    // Overloaded start method to allow launching with specific parameters
+    public void start(Stage primaryStage, String selectedCity, String selectedArea, String selectedLang) {
+        primaryStage.setTitle("Bridge To Law - Lawyer Directory");
+
+        // --- Navigation Bar ---
+        HBox navBar = getNavBar(primaryStage);
+
+        // --- Main Content Area ---
+        VBox mainContentLayout = new VBox(10);
+        mainContentLayout.setPadding(new Insets(20));
+        mainContentLayout.setAlignment(Pos.TOP_CENTER); // Align content to top-center
+
+        // Info
+        String infoText = String.format("🔍 Showing results for %s Lawyers in %s", selectedArea, selectedCity);
+        Label searchInfo = new Label(infoText);
+        searchInfo.setFont(Font.font("Segoe UI", 16)); // Consistent font, added FontWeight.BOLD for emphasis
+        searchInfo.setTextFill(Color.web("#001f4d")); // Changed to dark blue for better readability
+        searchInfo.setPadding(new Insets(10, 0, 20, 0));
+
+        // Responsive Card Container using FlowPane
+        FlowPane cardFlow = new FlowPane();
+        cardFlow.setHgap(25); // Increased horizontal gap
+        cardFlow.setVgap(25); // Increased vertical gap
+        cardFlow.setPadding(new Insets(10));
+        cardFlow.setPrefWrapLength(950); // Adjusted for better wrapping on 1000px width
+        cardFlow.setAlignment(Pos.CENTER); // Center the cards within the flow pane
+
+        // Add cards with navigation
+        addLawyerCard(primaryStage, cardFlow, "Neha Sharma", "Criminal", "10 Years Experience", "4.8/5", selectedCity, FEMALE_ICON_PATH);
+        addLawyerCard(primaryStage, cardFlow, "Rajeev Mehra", "Labour", "12 Years Experience", "4.5/5", selectedCity, MALE_ICON_PATH);
+        addLawyerCard(primaryStage, cardFlow, "Kavita Singh", "Criminal", "9 Years Experience", "4.7/5", selectedCity, FEMALE_ICON_PATH);
+        addLawyerCard(primaryStage, cardFlow, "Sameer Patil", "Labour", "7 Years Experience", "4.6/5", selectedCity, MALE_ICON_PATH);
+        addLawyerCard(primaryStage, cardFlow, "Arjun Rana", "Family", "8 Years Experience", "4.4/5", selectedCity, MALE_ICON_PATH);
+        addLawyerCard(primaryStage, cardFlow, "Pooja Iyer", "Property", "11 Years Experience", "4.9/5", selectedCity, FEMALE_ICON_PATH);
+        addLawyerCard(primaryStage, cardFlow, "Manoj Desai", "Divorce", "6 Years Experience", "4.3/5", selectedCity, MALE_ICON_PATH);
+        addLawyerCard(primaryStage, cardFlow, "Sonal Joshi", "Criminal", "5 Years Experience", "4.6/5", selectedCity, FEMALE_ICON_PATH);
+        addLawyerCard(primaryStage, cardFlow, "Amit Kulkarni", "Cyber Crime", "13 Years Experience", "4.9/5", selectedCity, MALE_ICON_PATH);
+        addLawyerCard(primaryStage, cardFlow, "Meera Deshpande", "Civil", "15 Years Experience", "4.7/5", selectedCity, FEMALE_ICON_PATH);
+
+        ScrollPane scrollPane = new ScrollPane(cardFlow);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setPannable(true);
+        scrollPane.setStyle("-fx-background-color: transparent;"); // Transparent background for scroll pane
+
+        mainContentLayout.getChildren().addAll(searchInfo, scrollPane);
+
+        // --- Background Image for the Content Area ---
+        ImageView backgroundImage = new ImageView(new Image(BACKGROUND_IMAGE_URL));
+        backgroundImage.setFitWidth(1000); // Will be bound to StackPane width
+        backgroundImage.setPreserveRatio(true);
+        backgroundImage.setOpacity(0.10); // Adjusted opacity to 0.10 (10%) for subtle visibility
+        backgroundImage.setManaged(false); // Do not let layout manager manage its size/position
+
+        // Create a StackPane to layer the background image and the scrollable content
+        StackPane contentStack = new StackPane();
+        contentStack.getChildren().addAll(backgroundImage, mainContentLayout);
+        StackPane.setAlignment(backgroundImage, Pos.TOP_CENTER); // Align background image
+        backgroundImage.fitWidthProperty().bind(contentStack.widthProperty()); // Make background image responsive
+
+        VBox root = new VBox();
+        root.getChildren().addAll(navBar, contentStack);
+        root.setStyle("-fx-background-color: #f0f2f5;"); // Light grey background for the entire window
+
+        Scene scene = new Scene(root, 1000, 700);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    private HBox getNavBar(Stage primaryStage) {
+        HBox navBar = new HBox(0);
+        navBar.setAlignment(Pos.CENTER_LEFT);
+        navBar.setPadding(new Insets(15, 30, 15, 30));
+        //navBar.setStyle("-fx-background-color: white; -fx-border-color: #e0e0e0ff; -fx-border-width: 0 0 1px 0;");
+        navBar.setStyle("-fx-background-color: #001f4d; -fx-border-color: #e0e0e0; -fx-border-width: 0 0 1px 0;");
+
+        // Left section: "Bridge To Law." logo
+        VBox logoBox = new VBox(-10);
+        Label bridgeLabel = new Label("Bridge");
+        bridgeLabel.setStyle("-fx-text-fill: white; -fx-font-size: 32px; -fx-font-weight: bold;");
+        Label toLawLabel = new Label("To Law.");
+        toLawLabel.setStyle("-fx-text-fill: white; -fx-font-size: 32px; -fx-font-weight: bold;");
+        logoBox.getChildren().addAll(bridgeLabel, toLawLabel);
+        logoBox.setAlignment(Pos.CENTER_LEFT);
+        HBox.setMargin(logoBox, new Insets(0, 60, 0, 0));
+
+        // Center section: Main navigation links
+        HBox mainNavLinks = new HBox(25);
+        mainNavLinks.setAlignment(Pos.CENTER_LEFT);
+
+        String mainNavLinkStyle = "-fx-background-color: transparent; " +
+                                  "-fx-text-fill: white; " +
+                                  "-fx-font-size: 14px; " +
+                                  "-fx-font-weight: normal; " +
+                                  "-fx-padding: 5px 0px;";
+
+        String mainNavLinkHoverStyle = "-fx-background-color: transparent; " +
+                                       "-fx-text-fill: #001f4d; " +
+                                       "-fx-font-size: 14px; " +
+                                       "-fx-font-weight: normal;";
+
+        Button homeButton = new Button("Home");
+        Button findLawyerButton = new Button("Find a Lawyer");
+        Button aboutUsButton = new Button("About Us");
+        Button legalNewsButton = new Button("Legal News");
+        Button contactUsButton = new Button("Contact Us");
+
+        homeButton.setStyle(mainNavLinkStyle);
+        // Highlight "Find a Lawyer" as the current page
+        findLawyerButton.setStyle(mainNavLinkStyle);
+        aboutUsButton.setStyle(mainNavLinkStyle);
+        legalNewsButton.setStyle(mainNavLinkStyle);
+        contactUsButton.setStyle(mainNavLinkStyle);
+
+        // Hover effects for navigation buttons
+        homeButton.setOnMouseEntered(e -> homeButton.setStyle(mainNavLinkStyle));
+        homeButton.setOnMouseExited(e -> homeButton.setStyle(mainNavLinkStyle));
+        findLawyerButton.setOnMouseEntered(e -> findLawyerButton.setStyle(mainNavLinkStyle));
+        findLawyerButton.setOnMouseExited(e -> findLawyerButton.setStyle(mainNavLinkStyle)); // Keep underline on exit
+        aboutUsButton.setOnMouseEntered(e -> aboutUsButton.setStyle(mainNavLinkStyle));
+        aboutUsButton.setOnMouseExited(e -> aboutUsButton.setStyle(mainNavLinkStyle));
+        legalNewsButton.setOnMouseEntered(e -> legalNewsButton.setStyle(mainNavLinkStyle));
+        legalNewsButton.setOnMouseExited(e -> legalNewsButton.setStyle(mainNavLinkStyle));
+        contactUsButton.setOnMouseEntered(e -> contactUsButton.setStyle(mainNavLinkStyle));
+        contactUsButton.setOnMouseExited(e -> contactUsButton.setStyle(mainNavLinkStyle));
+
+        mainNavLinks.getChildren().addAll(homeButton, findLawyerButton, aboutUsButton, legalNewsButton, contactUsButton);
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        navBar.getChildren().addAll(logoBox, mainNavLinks, spacer);
+
+        // --- Navigation Actions ---
+        homeButton.setOnAction(e -> {
+            System.out.println("Navigating to Home (landingPage)...");
+            primaryStage.close();
+            try {
+                new landingPage().start(new Stage());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                showErrorPopup(primaryStage, "Navigation Error", "Could not load the Home page. Please ensure 'landingPage.java' exists and is correctly compiled.");
+            }
+        });
+
+        aboutUsButton.setOnAction(e -> {
+            System.out.println("Navigating to About Us Page...");
+            primaryStage.close();
+            try {
+                new aboutus().start(new Stage());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                showErrorPopup(primaryStage, "Navigation Error", "Could not load the About Us page. Please ensure 'aboutus.java' exists and is correctly compiled.");
+            }
+        });
+
+        legalNewsButton.setOnAction(e -> {
+            System.out.println("Navigating to Legal News (landingPage)...");
+            primaryStage.close();
+            try {
+                // To scroll directly to the "Latest Legal News" section on landingPage,
+                // the landingPage class itself would need to be modified to accept a parameter
+                // or have a public method to trigger that scroll after it's displayed.
+                new landingPage().start(new Stage());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                showErrorPopup(primaryStage, "Navigation Error", "Could not load the Legal News page. Please ensure 'landingPage.java' exists and is correctly compiled.");
+            }
+        });
+
+        contactUsButton.setOnAction(e -> {
+            System.out.println("Navigating to Contact Us (About Us Page bottom)...");
+            primaryStage.close();
+            try {
+                // To scroll directly to the bottom of the About Us page,
+                // the aboutus class itself would need to be modified to accept a parameter
+                // or have a public method to trigger that scroll after it's displayed.
+                new aboutus().start(new Stage());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                showErrorPopup(primaryStage, "Navigation Error", "Could not load the Contact Us page. Please ensure 'aboutus.java' exists and is correctly compiled.");
+            }
+        });
+
+        return navBar;
+    }
+
+    private void addLawyerCard(Stage primaryStage, Pane parent, String name, String type, String exp, String rating, String city, String imgPath) {
+        VBox card = new VBox(8); // Reduced spacing for a tighter look
+        card.setPadding(new Insets(15));
+        card.setPrefWidth(280); // Adjusted width for better fit in FlowPane
+        card.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: #e0e0e0; -fx-border-width: 1px; -fx-background-radius: 10px; -fx-border-radius: 10px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 4);");
+
+        card.setOnMouseEntered(e -> card.setStyle(
+                "-fx-background-color: #F0F8FF; -fx-border-color: #001f4d; -fx-border-width: 2px; -fx-background-radius: 10px; -fx-border-radius: 10px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 15, 0, 0, 6);"
+        ));
+        card.setOnMouseExited(e -> card.setStyle(
+                "-fx-background-color: #FFFFFF; -fx-border-color: #e0e0e0; -fx-border-width: 1px; -fx-background-radius: 10px; -fx-border-radius: 10px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 4);"
+        ));
+
+        HBox imageBox = new HBox();
+        imageBox.setAlignment(Pos.CENTER);
+        ImageView image = new ImageView(new Image(imgPath));
+        image.setFitWidth(80); // Larger image
+        image.setFitHeight(80);
+        image.setPreserveRatio(false); // Allow non-proportional scaling for square
+        image.setClip(new javafx.scene.shape.Rectangle(80, 80)); // Clip to square
+        image.setStyle("-fx-border-color: #001f4d; -fx-border-width: 2; -fx-border-radius: 5;"); // Border around image
+        imageBox.getChildren().add(image);
+
+        Label nameLabel = new Label("Adv. " + name);
+        nameLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 20)); // Bolder, larger font
+        nameLabel.setTextFill(Color.web("#001f4d"));
+
+        Label ratingLabel = new Label("⭐ " + rating);
+        ratingLabel.setFont(Font.font("Segoe UI", 14));
+        ratingLabel.setTextFill(Color.web("#555555"));
+
+        Label expLabel = new Label("💼 " + exp); // Changed icon
+        expLabel.setFont(Font.font("Segoe UI", 14));
+        expLabel.setTextFill(Color.web("#555555"));
+
+        Label cityLabel = new Label("📍 " + city);
+        cityLabel.setFont(Font.font("Segoe UI", 14));
+        cityLabel.setTextFill(Color.web("#555555"));
+
+        Label tagLabel = new Label(type);
+        tagLabel.setStyle("-fx-background-color: #607D8B; -fx-text-fill: white; -fx-padding: 4 10 4 10; -fx-background-radius: 15px; -fx-font-size: 12px;"); // More rounded, slightly larger padding
+
+        Button viewButton = new Button("View Profile");
+        viewButton.setStyle(
+            "-fx-background-color: #001f4d; " +
+            "-fx-text-fill: white; " +
+            "-fx-font-size: 14px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-padding: 8px 15px; " +
+            "-fx-background-radius: 5; " +
+            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 0);"
+        );
+        viewButton.setOnMouseEntered(e -> viewButton.setStyle(
+            "-fx-background-color: #003366; " +
+            "-fx-text-fill: white; " +
+            "-fx-font-size: 14px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-padding: 8px 15px; " +
+            "-fx-background-radius: 5; " +
+            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 8, 0, 0, 0);"
+        ));
+        viewButton.setOnMouseExited(e -> viewButton.setStyle(
+            "-fx-background-color: #001f4d; " +
+            "-fx-text-fill: white; " +
+            "-fx-font-size: 14px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-padding: 8px 15px; " +
+            "-fx-background-radius: 5; " +
+            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 0);"
+        ));
+        viewButton.setPrefWidth(Double.MAX_VALUE); // Make button fill card width
+
+        card.getChildren().addAll(imageBox, nameLabel, ratingLabel, expLabel, cityLabel, tagLabel, viewButton);
+        parent.getChildren().add(card);
+    }
+
+    /**
+     * Displays a custom error popup.
+     * @param ownerStage The primary stage, used for modality.
+     * @param title The title of the popup.
+     * @param message The message to display in the popup.
+     */
+    /*private void showErrorPopup(Stage ownerStage, String title, String message) {
+        Stage popupStage = new Stage();
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.initOwner(ownerStage);
+        popupStage.setTitle(title);
+
+        VBox popupContent = new VBox(20);
+        popupContent.setAlignment(Pos.CENTER);
+        popupContent.setPadding(new Insets(30));
+        popupContent.setStyle("-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 0);");
+
+        // Red 'X' icon for error
+        Label errorLabel = new Label("✖"); // Unicode multiplication sign for error
+        errorLabel.setFont(Font.font("Arial", FontWeight.BOLD, 60));
+        errorLabel.setTextFill(Color.web("#D32F2F")); // Red color
+
+        Label messageLabel = new Label(message);
+        messageLabel.setFont(Font.font("Segoe UI", 16));
+        messageLabel.setTextFill(Color.web("#333333"));
+        messageLabel.setWrapText(true);
+        messageLabel.setTextAlignment(TextAlignment.CENTER);
+
+        Button okButton = new Button("OK");
+        okButton.setStyle(
+            "-fx-background-color: #001f4d; " +
+            "-fx-text-fill: white; " +
+            "-fx-font-size: 14px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-padding: 8px 15px; " +
+            "-fx-background-radius: 5;"
+        );
+        okButton.setOnAction(e -> popupStage.close());
+
+        popupContent.getChildren().addAll(errorLabel, messageLabel, okButton);
+
+        Scene popupScene = new Scene(popupContent);
+        popupStage.setScene(popupScene);
+        popupStage.showAndWait();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
+*/
+
+
+package com.btl.View;
+
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
+public class AdvocateGrid extends Application {
+
+    // --- Image URLs ---
+    private static final String BACKGROUND_IMAGE_URL = "Assets/Images/normal.jpg"; // Placeholder background image
+    private static final String FEMALE_ICON_PATH = "file:ll/src/main/resources/Assets/Images/female icon.png";
+    private static final String MALE_ICON_PATH = "file:ll/src/main/resources/Assets/Images/male icon.png";
+
+    // Standard start method as required by JavaFX, now delegating to the
+    // parameterized one.
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        // Example usage if you were to launch directly without parameters
+        start(primaryStage, "Mumbai", "Criminal", "English");
+    }
+
+    // Overloaded start method to allow launching with specific parameters
+    public void start(Stage primaryStage, String selectedCity, String selectedArea, String selectedLang) {
+        primaryStage.setTitle("Bridge To Law - Lawyer Directory");
+
+        // --- Navigation Bar ---
+        HBox navBar = getNavBar(primaryStage);
+
+        // --- Main Content Area ---
+        VBox mainContentLayout = new VBox(10);
+        mainContentLayout.setPadding(new Insets(20));
+        mainContentLayout.setAlignment(Pos.TOP_CENTER); // Align content to top-center
+
+        // Info
+        String infoText = String.format("🔍 Showing results for %s Lawyers in %s", selectedArea, selectedCity);
+        Label searchInfo = new Label(infoText);
+        searchInfo.setFont(Font.font("Segoe UI", 16)); // Consistent font, added FontWeight.BOLD for emphasis
+        searchInfo.setTextFill(Color.web("#001f4d")); // Changed to dark blue for better readability
+        searchInfo.setPadding(new Insets(10, 0, 20, 0));
+
+        // Responsive Card Container using FlowPane
+        FlowPane cardFlow = new FlowPane();
+        cardFlow.setHgap(25); // Increased horizontal gap
+        cardFlow.setVgap(25); // Increased vertical gap
+        cardFlow.setPadding(new Insets(10));
+        cardFlow.setPrefWrapLength(950); // Adjusted for better wrapping on 1000px width
+        cardFlow.setAlignment(Pos.CENTER); // Center the cards within the flow pane
+
+        // Add cards with navigation
+        addLawyerCard(primaryStage, cardFlow, "Neha Sharma", "Criminal", "10 Years Experience", "4.8/5", selectedCity, FEMALE_ICON_PATH);
+        addLawyerCard(primaryStage, cardFlow, "Rajeev Mehra", "Labour", "12 Years Experience", "4.5/5", selectedCity, MALE_ICON_PATH);
+        addLawyerCard(primaryStage, cardFlow, "Kavita Singh", "Criminal", "9 Years Experience", "4.7/5", selectedCity, FEMALE_ICON_PATH);
+        addLawyerCard(primaryStage, cardFlow, "Sameer Patil", "Labour", "7 Years Experience", "4.6/5", selectedCity, MALE_ICON_PATH);
+        addLawyerCard(primaryStage, cardFlow, "Arjun Rana", "Family", "8 Years Experience", "4.4/5", selectedCity, MALE_ICON_PATH);
+        addLawyerCard(primaryStage, cardFlow, "Pooja Iyer", "Property", "11 Years Experience", "4.9/5", selectedCity, FEMALE_ICON_PATH);
+        addLawyerCard(primaryStage, cardFlow, "Manoj Desai", "Divorce", "6 Years Experience", "4.3/5", selectedCity, MALE_ICON_PATH);
+        addLawyerCard(primaryStage, cardFlow, "Sonal Joshi", "Criminal", "5 Years Experience", "4.6/5", selectedCity, FEMALE_ICON_PATH);
+        addLawyerCard(primaryStage, cardFlow, "Amit Kulkarni", "Cyber Crime", "13 Years Experience", "4.9/5", selectedCity, MALE_ICON_PATH);
+        addLawyerCard(primaryStage, cardFlow, "Meera Deshpande", "Civil", "15 Years Experience", "4.7/5", selectedCity, FEMALE_ICON_PATH);
+
+        ScrollPane scrollPane = new ScrollPane(cardFlow);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setPannable(true);
+        scrollPane.setStyle("-fx-background-color: transparent;"); // Transparent background for scroll pane
+
+        mainContentLayout.getChildren().addAll(searchInfo, scrollPane);
+
+        // --- Background Image for the Content Area ---
+        ImageView backgroundImage = new ImageView(new Image(BACKGROUND_IMAGE_URL));
+        backgroundImage.setFitWidth(1000); // Will be bound to StackPane width
+        backgroundImage.setPreserveRatio(true);
+        backgroundImage.setOpacity(10); // Adjusted opacity to 0.10 (10%) for subtle visibility
+        backgroundImage.setManaged(false); // Do not let layout manager manage its size/position
+
+        // Create a StackPane to layer the background image and the scrollable content
+        StackPane contentStack = new StackPane();
+        contentStack.getChildren().addAll(backgroundImage, mainContentLayout);
+        StackPane.setAlignment(backgroundImage, Pos.TOP_CENTER); // Align background image
+        backgroundImage.fitWidthProperty().bind(contentStack.widthProperty()); // Make background image responsive
+
+        VBox root = new VBox();
+        root.getChildren().addAll(navBar, contentStack);
+        root.setStyle("-fx-background-color: #f0f2f5;"); // Light grey background for the entire window
+
+        Scene scene = new Scene(root, 1000, 700);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    private HBox getNavBar(Stage primaryStage) {
+        HBox navBar = new HBox(0);
+        navBar.setAlignment(Pos.CENTER_LEFT);
+        navBar.setPadding(new Insets(15, 30, 15, 30));
+        navBar.setStyle("-fx-background-color: #001f4d; -fx-border-color: #e0e0e0; -fx-border-width: 0 0 1px 0;"); // Changed to dark blue
+
+        // Left section: "Bridge To Law." logo
+        VBox logoBox = new VBox(-10);
+        Label bridgeLabel = new Label("Bridge");
+        bridgeLabel.setStyle("-fx-text-fill: white; -fx-font-size: 32px; -fx-font-weight: bold;"); // Text color to white
+        Label toLawLabel = new Label("To Law.");
+        toLawLabel.setStyle("-fx-text-fill: white; -fx-font-size: 32px; -fx-font-weight: bold;"); // Text color to white
+        logoBox.getChildren().addAll(bridgeLabel, toLawLabel);
+        logoBox.setAlignment(Pos.CENTER_LEFT);
+        HBox.setMargin(logoBox, new Insets(0, 60, 0, 0));
+
+        // Center section: Main navigation links
+        HBox mainNavLinks = new HBox(25);
+        mainNavLinks.setAlignment(Pos.CENTER_LEFT);
+
+        String mainNavLinkStyle = "-fx-background-color: transparent; " +
+                                  "-fx-text-fill: white; " + // Text color to white
+                                  "-fx-font-size: 14px; " +
+                                  "-fx-font-weight: normal; " +
+                                  "-fx-padding: 5px 0px;";
+
+        String mainNavLinkHoverStyle = "-fx-background-color: transparent; " +
+                                       "-fx-text-fill: #A0D2EB; " + // Lighter blue for hover
+                                       "-fx-font-size: 14px; " +
+                                       "-fx-font-weight: normal;";
+
+        Button homeButton = new Button("Home");
+        Button findLawyerButton = new Button("Find a Lawyer");
+        Button aboutUsButton = new Button("About Us");
+        Button legalNewsButton = new Button("Legal News");
+        Button contactUsButton = new Button("Contact Us");
+
+        homeButton.setStyle(mainNavLinkStyle);
+        // Highlight "Find a Lawyer" as the current page
+        findLawyerButton.setStyle(mainNavLinkStyle); // Keep original hover style for current page
+        aboutUsButton.setStyle(mainNavLinkStyle);
+        legalNewsButton.setStyle(mainNavLinkStyle);
+        contactUsButton.setStyle(mainNavLinkStyle);
+
+        // Hover effects for navigation buttons
+         homeButton.setOnMouseEntered(e -> homeButton.setStyle(mainNavLinkStyle));
+        homeButton.setOnMouseExited(e -> homeButton.setStyle(mainNavLinkStyle));
+        findLawyerButton.setOnMouseEntered(e -> findLawyerButton.setStyle(mainNavLinkStyle));
+        findLawyerButton.setOnMouseExited(e -> findLawyerButton.setStyle(mainNavLinkStyle)); // Keep underline on exit
+        aboutUsButton.setOnMouseEntered(e -> aboutUsButton.setStyle(mainNavLinkStyle));
+        aboutUsButton.setOnMouseExited(e -> aboutUsButton.setStyle(mainNavLinkStyle));
+        legalNewsButton.setOnMouseEntered(e -> legalNewsButton.setStyle(mainNavLinkStyle));
+        legalNewsButton.setOnMouseExited(e -> legalNewsButton.setStyle(mainNavLinkStyle));
+        contactUsButton.setOnMouseEntered(e -> contactUsButton.setStyle(mainNavLinkStyle));
+        contactUsButton.setOnMouseExited(e -> contactUsButton.setStyle(mainNavLinkStyle));
+
+        mainNavLinks.getChildren().addAll(homeButton, findLawyerButton, aboutUsButton, legalNewsButton, contactUsButton);
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        navBar.getChildren().addAll(logoBox, mainNavLinks, spacer);
+
+        // --- Navigation Actions ---
+        homeButton.setOnAction(e -> {
+            System.out.println("Navigating to Home (landingPage)...");
+            primaryStage.close();
+            try {
+                new landingPage().start(new Stage());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                showErrorPopup(primaryStage, "Navigation Error", "Could not load the Home page. Please ensure 'landingPage.java' exists and is correctly compiled.");
+            }
+        });
+
+        aboutUsButton.setOnAction(e -> {
+            System.out.println("Navigating to About Us Page...");
+            primaryStage.close();
+            try {
+                new aboutus().start(new Stage());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                showErrorPopup(primaryStage, "Navigation Error", "Could not load the About Us page. Please ensure 'aboutus.java' exists and is correctly compiled.");
+            }
+        });
+
+        legalNewsButton.setOnAction(e -> {
+            System.out.println("Navigating to Legal News (landingPage)...");
+            primaryStage.close();
+            try {
+                // To scroll directly to the "Latest Legal News" section on landingPage,
+                // the landingPage class itself would need to be modified to accept a parameter
+                // or have a public method to trigger that scroll after it's displayed.
+                new landingPage().start(new Stage());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                showErrorPopup(primaryStage, "Navigation Error", "Could not load the Legal News page. Please ensure 'landingPage.java' exists and is correctly compiled.");
+            }
+        });
+
+        contactUsButton.setOnAction(e -> {
+            System.out.println("Navigating to Contact Us (About Us Page bottom)...");
+            primaryStage.close();
+            try {
+                // To scroll directly to the bottom of the About Us page,
+                // the aboutus class itself would be modified to accept a parameter
+                // or have a public method to trigger that scroll after it's displayed.
+                new aboutus().start(new Stage());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                showErrorPopup(primaryStage, "Navigation Error", "Could not load the Contact Us page. Please ensure 'aboutus.java' exists and is correctly compiled.");
+            }
+        });
+
+        return navBar;
+    }
+
+    private void addLawyerCard(Stage primaryStage, Pane parent, String name, String type, String exp, String rating, String city, String imgPath) {
+        VBox card = new VBox(8); // Reduced spacing for a tighter look
+        card.setPadding(new Insets(15));
+        card.setPrefWidth(280); // Adjusted width for better fit in FlowPane
+        card.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: #e0e0e0; -fx-border-width: 1px; -fx-background-radius: 10px; -fx-border-radius: 10px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 4);");
+
+        card.setOnMouseEntered(e -> card.setStyle(
+                "-fx-background-color: #F0F8FF; -fx-border-color: #001f4d; -fx-border-width: 2px; -fx-background-radius: 10px; -fx-border-radius: 10px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 15, 0, 0, 6);"
+        ));
+        card.setOnMouseExited(e -> card.setStyle(
+                "-fx-background-color: #FFFFFF; -fx-border-color: #e0e0e0; -fx-border-width: 1px; -fx-background-radius: 10px; -fx-border-radius: 10px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 4);"
+        ));
+
+        HBox imageBox = new HBox();
+        imageBox.setAlignment(Pos.CENTER);
+        ImageView image = new ImageView(new Image(imgPath));
+        image.setFitWidth(80); // Larger image
+        image.setFitHeight(80);
+        image.setPreserveRatio(false); // Allow non-proportional scaling for square
+        image.setClip(new javafx.scene.shape.Rectangle(80, 80)); // Clip to square
+        image.setStyle("-fx-border-color: #001f4d; -fx-border-width: 2; -fx-border-radius: 5;"); // Border around image
+        imageBox.getChildren().add(image);
+
+        Label nameLabel = new Label("Adv. " + name);
+        nameLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 20)); // Bolder, larger font
+        nameLabel.setTextFill(Color.web("#001f4d"));
+
+        Label ratingLabel = new Label("⭐ " + rating);
+        ratingLabel.setFont(Font.font("Segoe UI", 14));
+        ratingLabel.setTextFill(Color.web("#555555"));
+
+        Label expLabel = new Label("💼 " + exp); // Changed icon
+        expLabel.setFont(Font.font("Segoe UI", 14));
+        expLabel.setTextFill(Color.web("#555555"));
+
+        Label cityLabel = new Label("📍 " + city);
+        cityLabel.setFont(Font.font("Segoe UI", 14));
+        cityLabel.setTextFill(Color.web("#555555"));
+
+        Label tagLabel = new Label(type);
+        tagLabel.setStyle("-fx-background-color: #607D8B; -fx-text-fill: white; -fx-padding: 4 10 4 10; -fx-background-radius: 15px; -fx-font-size: 12px;"); // More rounded, slightly larger padding
+
+        Button viewButton = new Button("View Profile");
+        viewButton.setStyle(
+            "-fx-background-color: #001f4d; " +
+            "-fx-text-fill: white; " +
+            "-fx-font-size: 14px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-padding: 8px 15px; " +
+            "-fx-background-radius: 5; " +
+            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 0);"
+        );
+        viewButton.setOnMouseEntered(e -> viewButton.setStyle(
+            "-fx-background-color: #003366; " +
+            "-fx-text-fill: white; " +
+            "-fx-font-size: 14px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-padding: 8px 15px; " +
+            "-fx-background-radius: 5; " +
+            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 8, 0, 0, 0);"
+        ));
+        viewButton.setOnMouseExited(e -> viewButton.setStyle(
+            "-fx-background-color: #001f4d; " +
+            "-fx-text-fill: white; " +
+            "-fx-font-size: 14px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-padding: 8px 15px; " +
+            "-fx-background-radius: 5; " +
+            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 0);"
+        ));
+        viewButton.setPrefWidth(Double.MAX_VALUE); // Make button fill card width
+
+        card.getChildren().addAll(imageBox, nameLabel, ratingLabel, expLabel, cityLabel, tagLabel, viewButton);
+        parent.getChildren().add(card);
+    }
+
+    /**
+     * Displays a custom error popup.
+     * @param ownerStage The primary stage, used for modality.
+     * @param title The title of the popup.
+     * @param message The message to display in the popup.
+     */
+    private void showErrorPopup(Stage ownerStage, String title, String message) {
+        Stage popupStage = new Stage();
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.initOwner(ownerStage);
+        popupStage.setTitle(title);
+
+        VBox popupContent = new VBox(20);
+        popupContent.setAlignment(Pos.CENTER);
+        popupContent.setPadding(new Insets(30));
+        popupContent.setStyle("-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 0);");
+
+        // Red 'X' icon for error
+        Label errorLabel = new Label("✖"); // Unicode multiplication sign for error
+        errorLabel.setFont(Font.font("Arial", FontWeight.BOLD, 60));
+        errorLabel.setTextFill(Color.web("#D32F2F")); // Red color
+
+        Label messageLabel = new Label(message);
+        messageLabel.setFont(Font.font("Segoe UI", 16));
+        messageLabel.setTextFill(Color.web("#333333"));
+        messageLabel.setWrapText(true);
+        messageLabel.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+
+        Button okButton = new Button("OK");
+        okButton.setStyle(
+            "-fx-background-color: #001f4d; " +
+            "-fx-text-fill: white; " +
+            "-fx-font-size: 14px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-padding: 8px 15px; " +
+            "-fx-background-radius: 5;"
+        );
+        okButton.setOnAction(e -> popupStage.close());
+
+        popupContent.getChildren().addAll(errorLabel, messageLabel, okButton);
+
+        Scene popupScene = new Scene(popupContent);
+        popupStage.setScene(popupScene);
+        popupStage.showAndWait();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
